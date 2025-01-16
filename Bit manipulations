@@ -1,0 +1,11 @@
+bool isSetbit(int x,int i){      //to check if the ith bit is set(1) in x.
+    return x&(1<<i);
+}
+
+void setBit(int &x,int i){      //to set the ith bit to set(1) in x.
+    x|=(1<<i);
+}
+
+void unsetBit(int &x,int i){    //to unset(0) the ith bit which is set(1) previously in x.
+    x&=~(1<<i);
+}
