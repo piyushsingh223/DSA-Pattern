@@ -1,0 +1,62 @@
+In this type of questions generally we have to perform some operation , so there are 2 index given , 
+starting index(from which we have to start the operation) and ending index(upto that index we have to
+perform the operation). so if we traverse all the indexes in the range , it will consume more 
+time resulting in TLE , so we take a prefix sum array and apply the operation on starting index
+and we apply the reverse of the operation on ending index +1 , so that the effect of the operation
+nullifies after the end index when we do prefix sum. for this , we also have to take the prefix 
+sum array of one extra size.
+
+
+Some questions using this approach :- 
+
+2381. Shifting Letters II :- 
+
+string shiftingLetters(string s, vector<vector<int>>& shifts) {
+        int n=s.size();
+        vector<int> presum(n+1,0);
+        for(auto x:shifts){
+            int low=x[0],high=x[1],parity=x[2];
+            if(parity==1){
+                presum[low]+=1;
+                presum[high+1]-=1;   //we are doing the opposite operation after the end index.
+            } else{
+                presum[low]-=1;
+                presum[high+1]+=1;
+            }
+        }
+        for(int i=1;i<n+1;i++){
+            presum[i]+=presum[i-1];
+        }
+        for(int i=0;i<n;i++){
+            int op=0;
+            op=(op+presum[i])%26;
+
+            if(op<0) op+=26;
+
+            char ch='a'+(s[i]-'a'+op)%26;    //for character transformation.
+            s[i]=ch;
+        }
+        return s;
+ }
+
+
+
+848. Shifting Letters:- 
+
+string shiftingLetters(string s, vector<int>& shifts) {
+        int n=s.size();
+        vector<long long> presum(n+1,0);
+        for(int i=0;i<n;i++){
+            presum[0]+=shifts[i];
+            presum[i+1]-=shifts[i];
+        }
+        for(int i=1;i<n+1;i++){
+            presum[i]+=presum[i-1];
+        }
+        for(int i=0;i<n;i++){
+            int op=(presum[i]+26)%26;
+            char ch='a'+(s[i]-'a'+op)%26;
+            s[i]=ch;
+        }
+        return s;
+}
